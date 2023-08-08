@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truco</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="./styles/truco.css">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+</head>
+<body>
+    <div id="app" >
+        <div class="mainContainer">
+            <div>
+                <div class="cardContainer">
+                    <div v-for="cardP1 in playerOne.cardHand">
+                        <button :disabled="game.p1Turn || field.length == 2" @click.prevent="selectCard(cardP1, playerOne)" class="card card__bot animate__animated animate__fadeInRight" :class="{cardBlock: game.p1Turn == true}">
+                            <div class="card__border">
+                                <p class="number1">{{cardP1.number}}</p>
+                                <img :src="cardP1.img" alt="imagen-card" class="imageCard">
+                                <p class="number2">{{cardP1.number}}</p>
+                            </div>
+                        </button>
+                    </div>
+
+<!--                     <div class="panelP1" :class="{block: game.p1Turn == true}" v-show="game.gameStart">
+                        <div>
+                            <button @click.prevent="cantarTruco(playerOne)" :disabled="trucoSay == true">Truco</button>
+                            <button @click.prevent="cantarReTruco(playerOne)" :disabled="playerTwo.truco == false">Re Truco</button>
+                            <button @click.prevent="cantarVale4(playerOne)" :disabled="playerTwo.reTruco == false">Vale 4</button>
+                        </div>
+                        <div>
+                            <button @click.prevent="sayEnvido('envido', playerOne)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true">Envido</button>
+                            <button @click.prevent="sayEnvido('realenvido', playerOne)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true">Real Envido</button>
+                            <button @click.prevent="sayEnvido('faltaenvido', playerOne)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true">Falta Envido</button>
+                        </div>
+                        <div>
+                            <h1>PUNTAJE:</h1>
+                            <h1 v-if="!game.p1PointsBad">Malas = {{game.p1Points}}</h1>
+                            <h1 v-if="game.p1PointsBad">Buenas = {{game.p1Points}}</h1>
+                        </div>
+                        <div>
+                            <h1>Puntos Envido = {{playerOne.totalEnvido}}</h1>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+
+            <div class="field">
+                <div v-for="cardField in field" class="card__field cardField animate__animated" :class="{cardFieldP2: cardField[1].numberP == 2, cardFieldP1: cardField[1].numberP == 1, animate__fadeInUp: cardField[1].numberP == 2, animate__fadeInDown: cardField[1].numberP == 1}">
+                    <div class="card__border">
+                        <p class="number1">{{cardField[0].number}}</p>
+                        <img :src="cardField[0].img" alt="imagen-card" class="imageCard">
+                        <p class="number2">{{cardField[0].number}}</p>
+                    </div>
+                </div>
+            </div>
+
+
+    
+            <div>
+                <div class="cardContainer">
+                    <div v-for="cardP2 in playerTwo.cardHand">
+                        <button :disabled="game.p2Turn || field.length == 2" @click.prevent="selectCard(cardP2, playerTwo)" class="card" :class="{cardBlock: game.p2Turn == true}" >
+                            <div class="card__border">
+                                <p class="number1">{{cardP2.number}}</p>
+                                <img :src="cardP2.img" alt="imagen-card" class="imageCard">
+                                <p class="number2">{{cardP2.number}}</p>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="panelP2" :class="{block: game.p2Turn == true}" v-show="game.gameStart">
+                        <div class="panelP2__container__buttons">
+                            <div class="panelP2__buttons">
+                                <button @click.prevent="cantarTruco(playerTwo)" :disabled="trucoSay == true" class="button__all button__truco">Truco</button>
+                                <button @click.prevent="cantarReTruco(playerTwo)" :disabled="playerOne.truco == false" class="button__truco button__all">Re Truco</button>
+                                <button @click.prevent="cantarVale4(playerTwo)" :disabled="playerOne.reTruco == false" class="button__truco button__all">Vale 4</button>
+                            </div>
+                            <div class="panelP2__buttons">
+                                <button @click.prevent="sayEnvido('envido', playerTwo)" :disabled="envidoSay == true || playerTwo.cardHand.length <= 2 || trucoSay == true" class="button__envido button__all">Envido</button>
+                                <button @click.prevent="sayEnvido('realenvido', playerTwo)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true" class="button__envido button__all">Real Envido</button>
+                                <button @click.prevent="sayEnvido('faltaenvido', playerTwo)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true" class="button__envido button__all">Falta Envido</button>
+                            </div>
+                        </div>
+                        <div class="puntaje__envido">
+                            <h1>{{playerTwo.totalEnvido}}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!--             <div v-if="panelTrucoP2" class="trucarP1">
+                <p>Jugador 1 panel</p>
+                <div>                 
+                    <button @click.prevent="aceptarTruco()" v-if="playerTwo.truco == true">aceptar truco</button>
+                    <button @click.prevent="denyTruco()" v-if="playerTwo.truco == true">No Quiero</button>
+                    <button @click.prevent="cantarReTruco(playerOne)" v-if="playerTwo.truco == true">quiero re truco</button>
+                    <button @click.prevent="aceptarReTruco()" v-if="playerTwo.reTruco == true">aceptar el re truco</button>
+                    <button @click.prevent="denyReTruco()" v-if="playerTwo.reTruco == true">no quiero el retruco</button>
+                    <button @click.prevent="cantarVale4(playerOne)" v-if="playerTwo.reTruco == true">Quiero vale 4</button>
+                    <button @click.prevent="aceptarVale4()" v-if="playerTwo.vale4 == true">aceptar vale 4</button>
+                    <button @click.prevent="denyVale4()" v-if="playerTwo.vale4 == true">no quiero vale 4</button>
+                </div>
+            </div> -->
+
+<!--                 <div v-if="panelEnvidoP1" class="trucarP1">
+                    <p>Envido P1</p>
+                    <div>
+                        <button @click="acceptEnvido(playerOne)">Aceptar Envido</button>
+                        <button @click="denyEnvido()">No quiero Envido</button>
+                        <button @click="sayEnvido('envido', playerOne)" :disabled="game.typeEnvido == 'realenvido' || game.typeEnvido == 'envidoenvido' || game.typeEnvido == 'faltaenvido' || game.typeEnvido == 'envidorealenvido' || game.typeEnvido == 'envidofaltaenvido' || game.typeEnvido == 'realenvidofalta' || game.typeEnvido == 'envidoenvidoreal' || game.typeEnvido == 'envidorealfalta' || game.typeEnvido == 'envidoenvidorealfalta'">Envido</button>
+                        <button @click.prevent="sayEnvido('realenvido', playerOne)" :disabled="game.typeEnvido == 'realenvido' || game.typeEnvido == 'faltaenvido' || game.typeEnvido == 'envidorealenvido' || game.typeEnvido == 'envidofaltaenvido' || game.typeEnvido == 'realenvidofalta' || game.typeEnvido == 'envidoenvidoreal' || game.typeEnvido == 'envidorealfalta' || game.typeEnvido == 'envidoenvidorealfalta'">Real Envido</button>
+                        <button @click.prevent="sayEnvido('faltaenvido', playerOne)" :disabled="game.typeEnvido == 'faltaenvido' || game.typeEnvido == 'envidofaltaenvido' || game.typeEnvido == 'realenvidofalta' || game.typeEnvido == 'envidorealfalta' || game.typeEnvido == 'envidoenvidorealfalta'  || game.typeEnvido == 'envidoenvido'">Falta Envido</button>
+                    </div>
+                </div> -->
+
+            <div v-if="panelEnvidoP2" class="trucarP2 panelDelEnvido animate__animated animate__zoomIn animate__zoomIn animate__delay-1s">
+                <div class="panel__envido__container">
+                    <div>
+                        <h3 v-show="game.typeEnvido == 'envido'">Envido</h3>
+                        <h3 v-show="game.typeEnvido == 'realenvido'">Real Envido</h3>
+                        <h3 v-show="game.typeEnvido == 'envidoenvido'">Envido Envido</h3>
+                        <h3 v-show="game.typeEnvido == 'envidorealenvido'">Envido Real Envido</h3>
+                        <h3 v-show="game.typeEnvido == 'envidoenvidoreal'">Envido Envido Real Envido</h3>
+                        <h3 v-show="game.typeEnvido == 'faltaenvido' || game.typeEnvido == 'envidofaltaenvido' || game.typeEnvido == 'realenvidofalta' || game.typeEnvido == 'envidorealfalta' || game.typeEnvido == 'envidoenvidorealfalta'">Falta Envido</h3>
+                    </div>
+                    <div class="panel__envido__buttons__container">
+                        <div class="panel__envido__buttons">
+                            <button class="button__all button__envido" @click="sayEnvido('envido', playerTwo)" :disabled="game.typeEnvido == 'realenvido' || game.typeEnvido == 'envidoenvido' || game.typeEnvido == 'faltaenvido' || game.typeEnvido == 'envidorealenvido' || game.typeEnvido == 'envidofaltaenvido' || game.typeEnvido == 'realenvidofalta' || game.typeEnvido == 'envidoenvidoreal' || game.typeEnvido == 'envidorealfalta' || game.typeEnvido == 'envidoenvidorealfalta'">Envido</button>
+                            <button class="button__all button__envido" @click.prevent="sayEnvido('realenvido', playerTwo)" :disabled="game.typeEnvido == 'realenvido' || game.typeEnvido == 'faltaenvido' || game.typeEnvido == 'envidorealenvido' || game.typeEnvido == 'envidofaltaenvido' || game.typeEnvido == 'realenvidofalta' || game.typeEnvido == 'envidoenvidoreal' || game.typeEnvido == 'envidorealfalta' || game.typeEnvido == 'envidoenvidorealfalta'">Real Envido</button>
+                            <button class="button__all button__envido" @click.prevent="sayEnvido('faltaenvido', playerTwo)" :disabled="game.typeEnvido == 'faltaenvido' || game.typeEnvido == 'envidofaltaenvido' || game.typeEnvido == 'realenvidofalta' || game.typeEnvido == 'envidorealfalta' || game.typeEnvido == 'envidoenvidorealfalta'  || game.typeEnvido == 'envidoenvido'">Falta Envido</button>
+                        </div>
+                        <div class="panel__envido__buttons">
+                            <button class="button__all button__accept" @click="acceptEnvido(playerTwo)">Aceptar Envido</button>
+                            <button class="button__all button__deny" @click="denyEnvido()">No quiero Envido</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+<!-- 
+            <div v-if="panelTrucoP1" class="trucarP2">
+                <div>
+                    <div>
+                        <h3 v-show="game.typeTruco == 'nada'">TRUCO!!!</h3>
+                        <h3 v-show="game.typeTruco == 'truco' || game.typeTruco == 'trucoAccept'">RE TRUCO!!!</h3>
+                        <h3 v-show="game.typeTruco == 'reTruco' || game.typeTruco == 'reTrucoAccept'">VALE 4!!!</h3>
+                    </div>
+                    <div>
+                        <button class="button__all button__envido" @click.prevent="sayEnvido('envido', playerTwo)" v-show="game.checkVictoryField == 0 && envidoSay == false">Envido</button>
+                        <button class="button__all button__envido" @click.prevent="sayEnvido('realenvido', playerTwo)" v-show="game.checkVictoryField == 0 && envidoSay == false">Real Envido</button>
+                        <button class="button__all button__envido" @click.prevent="sayEnvido('faltaenvido', playerTwo)" v-show="game.checkVictoryField == 0 && envidoSay == false">Falta Envido</button>
+                    </div>
+                    <div>
+                        <button @click.prevent="aceptarTruco()" v-if="playerOne.truco == true">aceptar truco</button>
+                        <button @click.prevent="denyTruco()" v-if="playerOne.truco == true">No Quiero</button>
+                        <button class="button__all button__truco" @click.prevent="cantarReTruco(playerTwo)" v-if="playerOne.truco == true">quiero re truco</button>
+                        <button @click.prevent="aceptarReTruco()" v-if="playerOne.reTruco == true">aceptar el re truco</button>
+                        <button @click.prevent="denyReTruco()" v-if="playerOne.reTruco == true">no quiero el retruco</button>
+                        <button class="button__all button__truco" @click.prevent="cantarVale4(playerTwo)" v-if="playerOne.reTruco == true">Quiero vale 4</button>
+                        <button @click.prevent="aceptarVale4()" v-if="playerOne.vale4 == true">aceptar vale 4</button>
+                        <button @click.prevent="denyVale4()" v-if="playerOne.vale4 == true">no quiero vale 4</button>
+                    </div>
+                </div>
+            </div> -->
+
+
+            <div v-if="panelTrucoP1" class="trucarP2 animate__animated animate__zoomIn animate__delay-1s">
+                <div class="panel__truco__container">
+                    <div>
+                        <h3 v-show="playerOne.truco == true">TRUCO!!!</h3>
+                        <h3 v-show="playerOne.reTruco == true">RE TRUCO!!!</h3>
+                        <h3 v-show="playerOne.vale4 == true">VALE 4!!!</h3>
+                    </div>
+                    <div class="panel__truco__buttons">
+                        <button class="button__all button__envido" @click.prevent="sayEnvido('envido', playerTwo)" v-show="game.checkVictoryField == 0 && envidoSay == false && playerOne.truco == true">Envido</button>
+                        <button class="button__all button__envido" @click.prevent="sayEnvido('realenvido', playerTwo)" v-show="game.checkVictoryField == 0 && envidoSay == false && playerOne.truco == true">Real Envido</button>
+                        <button class="button__all button__envido" @click.prevent="sayEnvido('faltaenvido', playerTwo)" v-show="game.checkVictoryField == 0 && envidoSay == false && playerOne.truco == true">Falta Envido</button>
+                    </div>
+                    <div class="panel__truco__buttons">
+                        <button class="button__all button__accept" @click.prevent="aceptarTruco()" v-if="playerOne.truco == true">aceptar truco</button>
+                        <button class="button__all button__deny" @click.prevent="denyTruco()" v-if="playerOne.truco == true">No Quiero</button>
+                        <button class="button__all button__truco" @click.prevent="cantarReTruco(playerTwo)" v-if="playerOne.truco == true">quiero re truco</button>
+                        <button class="button__all button__accept" @click.prevent="aceptarReTruco()" v-if="playerOne.reTruco == true">aceptar el re truco</button>
+                        <button class="button__all button__deny" @click.prevent="denyReTruco()" v-if="playerOne.reTruco == true">no quiero el retruco</button>
+                        <button class="button__all button__truco" @click.prevent="cantarVale4(playerTwo)" v-if="playerOne.reTruco == true">Quiero vale 4</button>
+                        <button class="button__all button__accept" @click.prevent="aceptarVale4()" v-if="playerOne.vale4 == true">aceptar vale 4</button>
+                        <button class="button__all button__deny" @click.prevent="denyVale4()" v-if="playerOne.vale4 == true">no quiero vale 4</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main__panel" v-show="game.gameStart == true">
+                <h1>PUNTAJE:</h1>
+                <div class="main__panel__puntaje">
+                    <div>
+                        <h1 class="main__panel__subtitles">Jugador</h1>
+                        <h3 v-if="!game.p2PointsBad">Malas = {{game.p2Points}}</h3>
+                        <h3 v-if="game.p2PointsBad">Buenas = {{game.p2Points}}</h3>
+                    </div>
+                    <div>
+                        <h1 class="main__panel__subtitles">Maquina</h1>
+                        <h3 v-if="!game.p1PointsBad">Malas = {{game.p1Points}}</h3>
+                        <h3 v-if="game.p1PointsBad">Buenas = {{game.p1Points}}</h3>
+                    </div>
+                </div>
+                <div class="main__panel__status__container">    
+                    <div>
+                        <h2 class="main__panel__subtitles">Estado Envido:</h2>
+                        <p v-show="game.typeEnvido == ''">Ninguno</p>
+                        <p v-show="game.typeEnvido == 'envido'">Envido</p>
+                        <p v-if="game.typeEnvido == 'envido' && game.statusEnvido">Aceptado +2</p>
+                        <p v-if="game.typeEnvido == 'envido' && !game.statusEnvido">No aceptado +1</p>
+
+                        <p v-show="game.typeEnvido == 'realenvido'">Real Envido</p>
+                        <p v-if="game.typeEnvido == 'realenvido' && game.statusEnvido">Aceptado +3</p>
+                        <p v-if="game.typeEnvido == 'realenvido' && !game.statusEnvido">No aceptado +1</p>
+
+                        <p v-show="game.typeEnvido == 'faltaenvido'">Falta Envido</p>
+                        <p v-if="game.typeEnvido == 'faltaenvido' && game.statusEnvido">Aceptado</p>
+                        <p v-if="game.typeEnvido == 'faltaenvido' && !game.statusEnvido">No aceptado +1</p>
+
+                        <p v-show="game.typeEnvido == 'envidoenvido'">Envido Envido</p>
+                        <p v-if="game.typeEnvido == 'envidoenvido' && game.statusEnvido">Aceptado +4</p>
+                        <p v-if="game.typeEnvido == 'envidoenvido' && !game.statusEnvido">No aceptado +2</p>
+
+                        <p v-show="game.typeEnvido == 'envidorealenvido'">Envido Real Envido</p>
+                        <p v-if="game.typeEnvido == 'envidorealenvido' && game.statusEnvido">Aceptado +5</p>
+                        <p v-if="game.typeEnvido == 'envidorealenvido' && !game.statusEnvido">No aceptado +2</p>
+
+                        <p v-show="game.typeEnvido == 'envidofaltaenvido'">Envido Falta Envido</p>
+                        <p v-if="game.typeEnvido == 'envidofaltaenvido' && game.statusEnvido">Aceptado</p>
+                        <p v-if="game.typeEnvido == 'envidofaltaenvido' && !game.statusEnvido">No aceptado +2</p>
+
+                        <p v-show="game.typeEnvido == 'realenvidofalta'">Real Falta Envido</p>
+                        <p v-if="game.typeEnvido == 'realenvidofalta' && game.statusEnvido">Aceptado</p>
+                        <p v-if="game.typeEnvido == 'realenvidofalta' && !game.statusEnvido">No aceptado +3</p>
+
+                        <p v-show="game.typeEnvido == 'envidoenvidoreal'">Envido Envido Real Envido</p>
+                        <p v-if="game.typeEnvido == 'envidoenvidoreal' && game.statusEnvido">Aceptado +7</p>
+                        <p v-if="game.typeEnvido == 'envidoenvidoreal' && !game.statusEnvido">No aceptado +4</p>
+
+                        <p v-show="game.typeEnvido == 'envidorealfalta'">Falta Envido</p>
+                        <p v-if="game.typeEnvido == 'envidorealfalta' && game.statusEnvido">Aceptado</p>
+                        <p v-if="game.typeEnvido == 'envidorealfalta' && !game.statusEnvido">No aceptado +5</p>
+
+                        <p v-show="game.typeEnvido == 'envidoenvidorealfalta'">Falta Envido</p>
+                        <p v-if="game.typeEnvido == 'envidoenvidorealfalta' && game.statusEnvido">Aceptado</p>
+                        <p v-if="game.typeEnvido == 'envidoenvidorealfalta' && !game.statusEnvido">No aceptado +7</p>
+                    </div>
+                    <div>
+                        <h2 class="main__panel__subtitles">Estado Truco:</h2>
+                        <p v-show="game.typeTruco == 'nada'">Ninguno</p>
+                        <p v-show="game.typeTruco == 'truco' || game.typeTruco == 'trucoAccept'">Truco Aceptado</p>
+                        <p v-show="game.typeTruco == 'reTruco' || game.typeTruco == 'reTrucoAccept'">Re Truco Aceptado</p>
+                        <p v-show="game.typeTruco == 'vale4' || game.typeTruco == 'vale4Accept'">Vale 4 Aceptado</p>
+                    </div>
+                </div>
+            </div>
+
+
+            
+            <button @click="mixAndShare(deck.deck)" v-if="game.gameStart == false" class="startGame">Empezar</button>
+
+
+        </div>
+        {{fieldCheck}}
+        {{gameCheck}}
+        {{checkPointsPlayer}}
+        {{botEnvidoBotTurn}}
+        {{botEnvidoResponses}}
+        {{botTrucoTurn}}
+        {{botProgram}}
+    </div>
+
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="./truco-vue.js"></script>
+</body>
+</html>
