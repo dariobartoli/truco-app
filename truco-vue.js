@@ -302,6 +302,8 @@ const app = Vue.createApp({
             envidoSay: false,
             botPlayer: {},
             count: 1,
+            probando: false,
+            envidoAccept: "",
         }
     },
     created(){
@@ -335,6 +337,10 @@ const app = Vue.createApp({
             p2Points: 0,
             p1PointsBad: false,
             p2PointsBad: false,
+            p1PointsTotal: 0,
+            p2PointsTotal: 0,
+            p1Buenas: 0,
+            p2Buenas: 0,
             cardsTruco: [],
             p1Turn: true,
             p2Turn: true,
@@ -347,7 +353,7 @@ const app = Vue.createApp({
         }
         this.botPlayer = {
             botStart: false,
-            decisionEnvido: 0,
+            decision: 0,
             envidoStatus: true,
             envido: "nada",
             trucoPoints: 0,
@@ -437,17 +443,43 @@ const app = Vue.createApp({
             playe == 1 ? this.viewOptionP1 = true : this.viewOptionP2 = true
             playe == 1 ? this.cardP1 = card : this.cardP2 = card
         },
-        denyTruco(){
+        denyTruco(type){
             this.botPlayer.trucoStatus = true
             this.count += 1
-            if(this.playerOne.truco == true){
-                this.game.p1Points += 1
-            }else if(this.playerTwo.truco == true){
-                this.game.p2Points += 1
+            if(type == "truco"){
+                if(this.playerOne.truco == true){
+                    this.game.p1Points += 1
+                }else if(this.playerTwo.truco == true){
+                    this.game.p2Points += 1
+                }
+                this.clean(1000)
+            }else if(type == "reTruco"){
+                if(this.playerOne.reTruco == true){
+                    this.game.p1Points += 2
+                }else if(this.playerTwo.reTruco == true){
+                    this.game.p2Points += 2
+                }
+                this.clean(1000)
+            }else if(type == "vale4"){
+                if(this.playerOne.vale4 == true){
+                    this.game.p1Points += 3
+                }else if(this.playerTwo.vale4 == true){
+                    this.game.p2Points += 3
+                }
+                this.clean(1000)
             }
-            this.clean(1000)
         },
         clean(number){
+            setTimeout(() => {
+                this.game.p1PointsTotal += this.game.p1Points
+                this.game.p2PointsTotal += this.game.p2Points
+                if(this.game.p1PointsBad){
+                    this.game.p1Buenas += this.game.p1Points
+                }
+                if(this.game.p2PointsBad){
+                    this.game.p2Buenas += this.game.p2Points
+                }
+            }, 500);
             setTimeout(() => {
                 this.field = []
                 this.playerOne.cardHand = []
@@ -477,9 +509,11 @@ const app = Vue.createApp({
                 this.game.statusEnvido = true
                 this.trucoSay = false
                 this.envidoSay = false
+                this.game.p1Points = 0
+                this.game.p2Points = 0
             }, number);
         },
-        denyReTruco(){
+/*         denyReTruco(){
             this.botPlayer.trucoStatus = true
             this.count += 1
             if(this.playerOne.reTruco == true){
@@ -498,48 +532,60 @@ const app = Vue.createApp({
                 this.game.p2Points += 3
             }
             this.clean(1000)
-        },
-        cantarTruco(player){
+        }, */
+        cantarTruco(player, type){
             let playe = player.numberP
             this.trucoSay = true
-            playe == 1? this.panelTrucoP1 = true : this.panelTrucoP2 = true
-            playe == 1? this.playerOne.truco = true : this.playerTwo.truco = true
+            playe == 1? [this.panelTrucoP1 = true, this.panelTrucoP2 = false] : [this.panelTrucoP1 = false, this.panelTrucoP2 = true]
+            if(type == "truco"){
+                playe == 1? this.playerOne.truco = true : this.playerTwo.truco = true
+            }else if(type == "reTruco"){
+                playe == 1? this.playerOne.reTruco = true : this.playerTwo.reTruco = true
+            }else if(type == "vale4"){
+                playe == 1? this.playerOne.vale4 = true : this.playerTwo.vale4 = true
+            }
         },
-        aceptarTruco(){
+        aceptarTruco(type){
             this.botPlayer.trucoStatus = true
             this.count += 1
-            this.game.typeTruco = "truco";
             this.panelTrucoP1 = false
             this.panelTrucoP2 = false
+            if(type == "truco"){
+                this.game.typeTruco = "truco";
+            }else if(type == "reTruco"){
+                this.game.typeTruco = "reTruco";
+            }else if(type == "vale4"){
+                this.game.typeTruco = "vale4";
+            }
         },
-        cantarReTruco(player){
+/*         cantarReTruco(player){
             let playe = player.numberP
             this.playerOne.truco = false
             this.playerTwo.truco = false
             playe == 1? [this.panelTrucoP1 = true, this.panelTrucoP2 = false] : [this.panelTrucoP1 = false, this.panelTrucoP2 = true]
             playe == 1? this.playerOne.reTruco = true : this.playerTwo.reTruco = true
-        },
-        aceptarReTruco(){
+        }, */
+/*         aceptarReTruco(){
             this.botPlayer.trucoStatus = true
             this.count += 1
             this.game.typeTruco = "reTruco";
             this.panelTrucoP1 = false
             this.panelTrucoP2 = false
-        },
-        cantarVale4(player){
+        }, */
+/*         cantarVale4(player){
             let playe = player.numberP
             this.playerOne.reTruco = false
             this.playerTwo.reTruco = false
             playe == 1? this.playerOne.vale4 = true : this.playerTwo.vale4 = true
             playe == 1? [this.panelTrucoP1 = true, this.panelTrucoP2 = false] : [this.panelTrucoP1 = false, this.panelTrucoP2 = true]
-        },
-        aceptarVale4(){
+        }, */
+/*         aceptarVale4(){
             this.botPlayer.trucoStatus = true
             this.count += 1
             this.game.typeTruco = "vale4";
             this.panelTrucoP1 = false
             this.panelTrucoP2 = false
-        },
+        }, */
         sayEnvido(type, player){
             this.envidoSay = true
             if(this.game.typeEnvido == ""){
@@ -612,6 +658,7 @@ const app = Vue.createApp({
             this.panelEnvidoP1 = false
             this.panelEnvidoP2 = false
             this.botPlayer.envidoStatus = true
+            this.envidoAccept = "aceptado"
             this.count++
             let pointsFaltaEnvido = this.pointsWinFaltaEnvido(somePlayer)
             setTimeout(() => {
@@ -745,6 +792,7 @@ const app = Vue.createApp({
             this.panelEnvidoP2 = false
             this.botPlayer.envidoStatus = true
             this.game.statusEnvido = false
+            this.envidoAccept = "rechazado"
             this.count++
             if(this.game.typeEnvido == "envido"){
                 if(this.playerOne.envido == "envido"){
@@ -865,8 +913,8 @@ const app = Vue.createApp({
             }
         },
         botStatus(){
-            this.botPlayer.decisionEnvido = Math.floor(Math.random() * 10) + 1;
-            console.log("puntos de decision:" + this.botPlayer.decisionEnvido);
+            this.botPlayer.decision = Math.floor(Math.random() * 10) + 1;
+            console.log("puntos de decision:" + this.botPlayer.decision);
             if(this.playerOne.totalEnvido >= 32){
                 this.botPlayer.envido = "muyaltos"
             }else if(this.playerOne.totalEnvido > 28){
@@ -891,14 +939,14 @@ const app = Vue.createApp({
             if(this.game.p1PointsBad == false && this.game.p2PointsBad == false){
                 console.log("entré a las malas");
                 if(playe == 1){ 
-                    return (15 - this.game.p2Points)
+                    return (15 - this.game.p2PointsTotal)
                 }else{
-                    return (15 - this.game.p1Points)
+                    return (15 - this.game.p1PointsTotal)
                 }
             }else if(this.game.p1PointsBad == true && this.game.p2PointsBad == false || this.game.p1PointsBad == false && this.game.p2PointsBad == true){
                 console.log("entré a las medias malas");
-                let pointsP1 = 15 - this.game.p1Points
-                let pointsP2 = 15 - this.game.p2Points 
+                let pointsP1 = 15 - this.game.p1PointsTotal
+                let pointsP2 = 15 - this.game.p2PointsTotal
                 if(pointsP1 < pointsP2){
                     return pointsP1
                 }else{
@@ -906,8 +954,8 @@ const app = Vue.createApp({
                 }
             }else if(this.game.p1PointsBad == true && this.game.p2PointsBad == true){
                 console.log("entré a las buenas");
-                let pointsP1 = 15 -this.game.p1Points
-                let pointsP2 = 15 -this.game.p2Points
+                let pointsP1 = 15 -this.game.p1PointsTotal
+                let pointsP2 = 15 -this.game.p2PointsTotal
                 if(pointsP1 < pointsP2){
                     return pointsP1
                 }else{
@@ -1281,30 +1329,26 @@ const app = Vue.createApp({
         },
         checkPointsPlayer(){
             if(!this.game.p1PointsBad){
-                if(this.game.p1Points >= 15){
-                    let newPoints = this.game.p1Points - 15
-                    setTimeout(() => {
-                        this.game.p1Points = newPoints
-                        this.game.p1PointsBad = true
-                    }, 600);
+                if(this.game.p1PointsTotal >= 15){
+                    this.game.p1Buenas = this.game.p1PointsTotal - 15
+                    this.game.p1PointsBad = true
+                    this.game.p1PointsTotal = 0
                 }
             }
             if(!this.game.p2PointsBad){
-                if(this.game.p2Points >= 15){
-                    let newPoints = this.game.p2Points - 15
-                    setTimeout(() => {
-                        this.game.p2Points = newPoints
-                        this.game.p2PointsBad = true
-                    }, 600);
+                if(this.game.p2PointsTotal >= 15){
+                    this.game.p2Buenas = this.game.p2PointsTotal - 15
+                    this.game.p2PointsBad = true
+                    this.game.p2PointsTotal = 0
                 }
             }
             if(this.game.p1PointsBad){
-                if(this.game.p1Points >= 15){
+                if(this.game.p1Buenas >= 15){
                     this.game.winner = "GANO EL JUGADOR 1"
                 }
             }
             if(this.game.p2PointsBad){
-                if(this.game.p2Points >= 15){
+                if(this.game.p2Buenas >= 15){
                     this.game.winner = "GANO EL JUGADOR 2"
                 }
             }
@@ -1316,9 +1360,9 @@ const app = Vue.createApp({
                     this.botPlayer.play = true
                 }, 2000);
                 if(this.playerOne.cardHand.length == 3 && this.botPlayer.play){
-                    if(this.botPlayer.decisionEnvido <=5 && this.game.mano == "P1"){
+                    if(this.botPlayer.decision <=5 && this.game.mano == "P1"){
                         this.selectCard(this.playerOne.cardHand[0], this.playerOne)
-                    }else if(this.botPlayer.decisionEnvido >=5 && this.game.mano == "P1"){
+                    }else if(this.botPlayer.decision >=5 && this.game.mano == "P1"){
                         this.selectCard(this.playerOne.cardHand[2], this.playerOne)
                     }else{
                         let card = this.playerOne.cardHand.filter((card) => card.value > this.field[0][0].value)
@@ -1332,9 +1376,9 @@ const app = Vue.createApp({
                     if(this.game.checkVictoryField[0] == "P2" || this.game.checkVictoryField[0] == "E"){
                         this.selectCard(this.playerOne.cardHand[1], this.playerOne)
                     }else if(this.game.checkVictoryField[0] == "P1"){
-                        if(this.botPlayer.decisionEnvido <=5){
+                        if(this.botPlayer.decision <=5){
                             this.selectCard(this.playerOne.cardHand[0], this.playerOne)
-                        }else if(this.botPlayer.decisionEnvido >=5){
+                        }else if(this.botPlayer.decision >=5){
                             this.selectCard(this.playerOne.cardHand[1], this.playerOne)
                         }
                     }else{
@@ -1354,34 +1398,34 @@ const app = Vue.createApp({
             if(this.game.gameStart == true){
                 if(!this.game.p1Turn && this.envidoSay == false && this.trucoSay == false){
                     if(this.botPlayer.envido == "no"){
-                        if(this.botPlayer.decisionEnvido == 1 && this.game.typeEnvido == ""){
+                        if(this.botPlayer.decision == 1 && this.game.typeEnvido == ""){
                             this.sayEnvido("envido", this.playerOne)
                             this.botPlayer.envidoStatus = false
-                        }else if(this.botPlayer.decisionEnvido == 10 && this.game.typeEnvido == ""){
+                        }else if(this.botPlayer.decision == 10 && this.game.typeEnvido == ""){
                             this.sayEnvido("realenvido", this.playerOne)
                             this.botPlayer.envidoStatus = false
                         }else console.log("no canté envido");
                     }else if(this.botPlayer.envido == "bajos"){
-                        if(this.botPlayer.decisionEnvido < 3 && this.game.typeEnvido == ""){
+                        if(this.botPlayer.decision < 3 && this.game.typeEnvido == ""){
                             this.sayEnvido("envido", this.playerOne)
                             this.botPlayer.envidoStatus = false
-                        }else if(this.botPlayer.decisionEnvido > 9 && this.game.typeEnvido == ""){
+                        }else if(this.botPlayer.decision > 9 && this.game.typeEnvido == ""){
                             this.sayEnvido("realenvido", this.playerOne)
                             this.botPlayer.envidoStatus = false
                         }else console.log("no canté envido");
                     }else if(this.botPlayer.envido == "medios"){
-                        if(this.botPlayer.decisionEnvido < 9 && this.game.typeEnvido == ""){
+                        if(this.botPlayer.decision < 9 && this.game.typeEnvido == ""){
                             this.sayEnvido("envido", this.playerOne)
                             this.botPlayer.envidoStatus = false
-                        }else if(this.botPlayer.decisionEnvido > 9 && this.game.typeEnvido == ""){
+                        }else if(this.botPlayer.decision > 9 && this.game.typeEnvido == ""){
                             this.sayEnvido("realenvido", this.playerOne)
                             this.botPlayer.envidoStatus = false
                         }else console.log("no canté envido");
                     }else if(this.botPlayer.envido == "altos"){
-                        if(this.botPlayer.decisionEnvido <=8 && this.game.typeEnvido == ""){
+                        if(this.botPlayer.decision <=8 && this.game.typeEnvido == ""){
                             this.sayEnvido("envido", this.playerOne)
                             this.botPlayer.envidoStatus = false
-                        }else if(this.botPlayer.decisionEnvido >= 9 && this.game.typeEnvido == ""){
+                        }else if(this.botPlayer.decision >= 9 && this.game.typeEnvido == ""){
                             this.sayEnvido("realenvido", this.playerOne)
                             this.botPlayer.envidoStatus = false
                         }else console.log("no canté envido");
@@ -1395,49 +1439,49 @@ const app = Vue.createApp({
         botEnvidoResponses(){
             if(this.panelEnvidoP1 == true){
                 if (this.botPlayer.envido == "no") {
-                    if(this.game.typeEnvido == "envido" && this.botPlayer.decisionEnvido == 10){
+                    if(this.game.typeEnvido == "envido" && this.botPlayer.decision == 10){
                         this.sayEnvido("envido", this.playerOne)
                     }else this.denyEnvido()
                 }else if (this.botPlayer.envido == "bajos") {
                     if(this.game.typeEnvido == "envido"){
-                        if(this.botPlayer.decisionEnvido == 9 || this.botPlayer.decisionEnvido == 2){
+                        if(this.botPlayer.decision == 9 || this.botPlayer.decision == 2){
                             this.sayEnvido("envido", this.playerOne)
-                        }else if(this.botPlayer.decisionEnvido == 3){
+                        }else if(this.botPlayer.decision == 3){
                             this.acceptEnvido(this.playerOne)
                         }else this.denyEnvido()
-                    }else if(this.game.typeEnvido == "envido" && this.botPlayer.decisionEnvido == 6 ||  this.game.typeEnvido == "envido" && this.botPlayer.decisionEnvido == 1){
+                    }else if(this.game.typeEnvido == "envido" && this.botPlayer.decision == 6 ||  this.game.typeEnvido == "envido" && this.botPlayer.decision == 1){
                         this.sayEnvido("realenvido", this.playerOne)
                     }else this.denyEnvido()
                 }else if (this.botPlayer.envido == "medios") {
                     if(this.game.typeEnvido == "envido"){
-                        if(this.botPlayer.decisionEnvido < 6){
+                        if(this.botPlayer.decision < 6){
                             this.sayEnvido("envido", this.playerOne)
-                        }else if(this.botPlayer.decisionEnvido > 8){
+                        }else if(this.botPlayer.decision > 8){
                             this.acceptEnvido(this.playerOne)
                         }else this.denyEnvido()
                     }else if(this.game.typeEnvido == "envido"){
-                        if(this.botPlayer.decisionEnvido < 7){
+                        if(this.botPlayer.decision < 7){
                             this.sayEnvido("realenvido", this.playerOne)
-                        }else if(this.botPlayer.decisionEnvido > 9){
+                        }else if(this.botPlayer.decision > 9){
                             this.acceptEnvido(this.playerOne)
                         }else this.denyEnvido()
                     }else if(this.game.typeEnvido == "realenvido" || this.game.typeEnvido == "faltaenvido"){
-                        if(this.botPlayer.decisionEnvido < 8){
+                        if(this.botPlayer.decision < 8){
                             this.acceptEnvido(this.playerOne)
                         }else this.denyEnvido()
                     }else if(this.game.typeEnvido == "envidoenvido"){
-                        if(this.botPlayer.decisionEnvido < 5){
+                        if(this.botPlayer.decision < 5){
                             this.acceptEnvido(this.playerOne)
                         }else this.denyEnvido()
                     }else if(this.game.typeEnvido == "envidorealenvido"){
-                        if(this.botPlayer.decisionEnvido < 3 || this.botPlayer.decisionEnvido  > 8){
+                        if(this.botPlayer.decision < 3 || this.botPlayer.decision  > 8){
                             this.acceptEnvido(this.playerOne)
                         }else this.denyEnvido()
                     }else if(this.game.typeEnvido == "envidofaltaenvido" || this.game.typeEnvido == "envidorealfalta"){
-                        if(this.botPlayer.decisionEnvido > 6){
+                        if(this.botPlayer.decision > 6){
                             this.acceptEnvido(this.playerOne)
                         }else this.denyEnvido()
-                    }else if(this.game.typeEnvido == "envidoenvidoreal" && this.botPlayer.decisionEnvido < 5){
+                    }else if(this.game.typeEnvido == "envidoenvidoreal" && this.botPlayer.decision < 5){
                         this.acceptEnvido(this.playerOne)
                     }else this.denyEnvido()
                 }else if (this.botPlayer.envido == "altos") {
@@ -1446,9 +1490,9 @@ const app = Vue.createApp({
                     }else if(this.game.typeEnvido == "realenvido" || this.game.typeEnvido == "faltaenvido"){
                         this.acceptEnvido(this.playerOne)
                     }else if(this.game.typeEnvido == "envidoenvido"){
-                        if(this.botPlayer.decisionEnvido <= 5){
+                        if(this.botPlayer.decision <= 5){
                             this.acceptEnvido(this.playerOne)
-                        }else if(this.botPlayer.decisionEnvido >= 6) {
+                        }else if(this.botPlayer.decision >= 6) {
                             this.sayEnvido("realenvido", this.playerOne)
                         }
                     }else this.acceptEnvido(this.playerOne)
@@ -1466,126 +1510,126 @@ const app = Vue.createApp({
                     if(!this.game.p1Turn && this.trucoSay == false && this.botPlayer.envidoStatus == true){
                         if(this.botPlayer.trucoPoints >= 20){
                             this.botPlayer.trucoStatus = false
-                            this.cantarTruco(this.playerOne)
-                        }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.decisionEnvido <= 7 && this.botPlayer.trucoPoints < 20){
+                            this.cantarTruco(this.playerOne, "truco")
+                        }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.decision <= 7 && this.botPlayer.trucoPoints < 20){
                             this.botPlayer.trucoStatus = false
-                            this.cantarTruco(this.playerOne)
-                        }else if(this.botPlayer.trucoPoints >= 9 && this.botPlayer.decisionEnvido >= 9 && this.botPlayer.trucoPoints < 15){
+                            this.cantarTruco(this.playerOne, "truco")
+                        }else if(this.botPlayer.trucoPoints >= 9 && this.botPlayer.decision >= 9 && this.botPlayer.trucoPoints < 15){
                             this.botPlayer.trucoStatus = false
-                            this.cantarTruco(this.playerOne)
-                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.decisionEnvido == 4 && this.botPlayer.trucoPoints < 19){
+                            this.cantarTruco(this.playerOne, "truco")
+                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.decision == 4 && this.botPlayer.trucoPoints < 19){
                             this.botPlayer.trucoStatus = false
-                            this.cantarTruco(this.playerOne)
+                            this.cantarTruco(this.playerOne, "truco")
                         }
                     }else if(!this.game.p1Turn && this.game.typeTruco == "trucoAccept" && this.playerTwo.truco == true){
                         if(this.botPlayer.trucoPoints >= 24){
                             this.botPlayer.trucoStatus = false
-                            this.cantarReTruco(this.playerOne)
-                        }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.decisionEnvido <= 5 && this.botPlayer.trucoPoints < 24){
+                            this.cantarTruco(this.playerOne, "reTruco")
+                        }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.decision <= 5 && this.botPlayer.trucoPoints < 24){
                             this.botPlayer.trucoStatus = false
-                            this.cantarReTruco(this.playerOne)
-                        }else if(this.botPlayer.trucoPoints >= 9 && this.botPlayer.decisionEnvido >= 9 && this.botPlayer.trucoPoints < 15){
+                            this.cantarTruco(this.playerOne, "reTruco")
+                        }else if(this.botPlayer.trucoPoints >= 9 && this.botPlayer.decision >= 9 && this.botPlayer.trucoPoints < 15){
                             this.botPlayer.trucoStatus = false
-                            this.cantarReTruco(this.playerOne)
-                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.decisionEnvido == 1 && this.botPlayer.trucoPoints < 9){
+                            this.cantarTruco(this.playerOne, "reTruco")
+                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.decision == 1 && this.botPlayer.trucoPoints < 9){
                             this.botPlayer.trucoStatus = false
-                            this.cantarReTruco(this.playerOne)
+                            this.cantarTruco(this.playerOne, "reTruco")
                         }
                     }else if(!this.game.p1Turn && this.game.typeTruco == "reTrucoAccept" && this.playerTwo.reTruco == true){
                         if(this.botPlayer.trucoPoints >= 28){
                             this.botPlayer.trucoStatus = false
-                            this.cantarVale4(this.playerOne)
-                        }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.decisionEnvido <= 5 && this.botPlayer.trucoPoints < 28){
+                            this.cantarTruco(this.playerOne, "vale4")
+                        }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.decision <= 5 && this.botPlayer.trucoPoints < 28){
                             this.botPlayer.trucoStatus = false
-                            this.cantarVale4(this.playerOne)
-                        }else if(this.botPlayer.trucoPoints >= 9 && this.botPlayer.decisionEnvido >= 9 && this.botPlayer.trucoPoints < 15){
+                            this.cantarTruco(this.playerOne, "vale4")
+                        }else if(this.botPlayer.trucoPoints >= 9 && this.botPlayer.decision >= 9 && this.botPlayer.trucoPoints < 15){
                             this.botPlayer.trucoStatus = false
-                            this.cantarVale4(this.playerOne)
-                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.decisionEnvido == 1 && this.botPlayer.trucoPoints < 9){
+                            this.cantarTruco(this.playerOne, "vale4")
+                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.decision == 1 && this.botPlayer.trucoPoints < 9){
                             this.botPlayer.trucoStatus = false
-                            this.cantarVale4(this.playerOne)
+                            this.cantarTruco(this.playerOne, "vale4")
                         }
                     }
                 }if(this.panelTrucoP2 == true){
                     console.log("entré al panel truco");
-                    if(this.playerTwo.truco == true){
+                    if(this.playerTwo.truco == true && this.playerTwo.vale4 == false){
                         console.log("entré a la respuesta del truco");
                         if(this.botPlayer.trucoPoints >= 24){
                             this.botPlayer.trucoStatus = false
-                            this.cantarReTruco(this.playerOne)
+                            this.cantarTruco(this.playerOne, "reTruco")
                         }else if(this.botPlayer.trucoPoints >= 20){
-                            if(this.botPlayer.decisionEnvido <=5){
+                            if(this.botPlayer.decision <=5){
                                 this.botPlayer.trucoStatus = false
-                                this.cantarReTruco(this.playerOne)
-                            }else if(this.botPlayer.decisionEnvido >=6){
+                                this.cantarTruco(this.playerOne, "reTruco")
+                            }else if(this.botPlayer.decision >=6){
                                 this.botPlayer.trucoStatus = false
-                                this.aceptarTruco()
+                                this.aceptarTruco("truco")
                             }
                         }else if(this.botPlayer.trucoPoints >=18){
                             this.botPlayer.trucoStatus = false
-                            this.aceptarTruco()
+                            this.aceptarTruco("truco")
                         }else if(this.botPlayer.trucoPoints >= 10 && this.botPlayer.trucoPoints < 18){
-                            if(this.botPlayer.decisionEnvido <= 5){
+                            if(this.botPlayer.decision <= 5){
                                 this.botPlayer.trucoStatus = false
-                                this.cantarReTruco(this.playerOne)
-                            }else if(this.botPlayer.decisionEnvido > 8){
+                                this.cantarTruco(this.playerOne, "reTruco")
+                            }else if(this.botPlayer.decision > 8){
                                 this.botPlayer.trucoStatus = false
-                                this.aceptarTruco()
-                            }else this.denyTruco()
+                                this.aceptarTruco("truco")
+                            }else this.denyTruco("truco")
                         }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.trucoPoints < 10){
-                            if(this.botPlayer.decisionEnvido >= 8){
+                            if(this.botPlayer.decision >= 8){
                                 this.botPlayer.trucoStatus = false
-                                this.cantarReTruco(this.playerOne)
-                            }this.denyTruco()
-                        }else this.denyTruco()
-                    }else if(this.playerTwo.reTruco == true){
+                                this.cantarTruco(this.playerOne, "reTruco")
+                            }this.denyTruco("truco")
+                        }else this.denyTruco("truco")
+                    }else if(this.playerTwo.reTruco == true && this.playerTwo.vale4 == false){
                         console.log("entré a la respuesta del retruco");
                         if(this.botPlayer.trucoPoints >= 24){
                             this.botPlayer.trucoStatus = false
-                            this.aceptarReTruco()
+                            this.aceptarTruco("reTruco")
                         }else if(this.botPlayer.trucoPoints >= 20){
-                            if(this.botPlayer.decisionEnvido <= 5){
+                            if(this.botPlayer.decision <= 5){
                                 this.botPlayer.trucoStatus = false
-                                this.aceptarReTruco()
+                                this.aceptarTruco("reTruco")
                             }else{
                                 this.botPlayer.trucoStatus = false
-                                this.cantarVale4(this.playerOne)
+                                this.cantarTruco(this.playerOne, "vale4")
                             }
                         }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.trucoPoints < 20){
-                            if(this.botPlayer.decisionEnvido > 8){
+                            if(this.botPlayer.decision > 8){
                                 this.botPlayer.trucoStatus = false
-                                this.aceptarReTruco()
-                            }else if(this.botPlayer.decisionEnvido < 4){
+                                this.aceptarTruco("reTruco")
+                            }else if(this.botPlayer.decision < 4){
                                 this.botPlayer.trucoStatus = false
-                                this.cantarVale4(this.playerOne)
-                            }else this.denyReTruco()
+                                this.cantarTruco(this.playerOne, "vale4")
+                            }else this.denyTruco("reTruco")
                         }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.trucoPoints < 15){
-                            if(this.botPlayer.decisionEnvido == 6 || this.botPlayer.decisionEnvido == 3){
+                            if(this.botPlayer.decision == 6 || this.botPlayer.decision == 3){
                                 this.botPlayer.trucoStatus = false
-                                this.cantarVale4(this.playerOne)
-                            }else this.denyReTruco()
-                        }else this.denyReTruco()
+                                this.cantarTruco(this.playerOne, "vale4")
+                            }else this.denyTruco("reTruco")
+                        }else this.denyTruco("reTruco")
                     }else if(this.playerTwo.vale4 == true){
                         console.log("entré a la respuesta del vale4");
                         if(this.botPlayer.trucoPoints >= 28){
                             this.botPlayer.trucoStatus = false
-                            this.aceptarVale4()
+                            this.aceptarTruco("vale4")
                         }else if(this.botPlayer.trucoPoints >= 26){
-                            if(this.botPlayer.decisionEnvido <= 6){
+                            if(this.botPlayer.decision <= 6){
                                 this.botPlayer.trucoStatus = false
-                                this.aceptarVale4()
-                            }else this.denyVale4()
+                                this.aceptarTruco("vale4")
+                            }else this.denyTruco("vale4")
                         }else if(this.botPlayer.trucoPoints >= 24){
-                            if(this.botPlayer.decisionEnvido <= 4){
+                            if(this.botPlayer.decision <= 4){
                                 this.botPlayer.trucoStatus = false
-                                this.aceptarVale4()
-                            }else this.denyVale4()
+                                this.aceptarTruco("vale4")
+                            }else this.denyTruco("vale4")
                         }else if(this.botPlayer.trucoPoints >= 20){
-                            if(this.botPlayer.decisionEnvido == 9 || this.botPlayer.decisionEnvido == 4){
+                            if(this.botPlayer.decision == 9 || this.botPlayer.decision == 4){
                                 this.botPlayer.trucoStatus = false
-                                this.aceptarVale4()
-                            }else this.denyVale4()
-                        }else this.denyVale4()
+                                this.aceptarTruco("vale4")
+                            }else this.denyTruco("vale4")
+                        }else this.denyTruco("vale4")
                     }
                 }
         }
