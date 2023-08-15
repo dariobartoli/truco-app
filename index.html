@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truco</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="./styles/index.css">
+
+</head>
+<body>
+    <div class="mainContainer" id="app">
+        <div class="index__card">
+            <h1>TRUCO</h1>
+            <div>
+                <input type="text" placeholder="Ingrese su nick" v-model="namePlayer">
+                <p class="texto__warning" :class="{warning: namePlayerBool == true}">Ingresar un nombre...</p>
+            </div>
+            <button @click.prevent="playGame()">Jugar</button>
+            <a href="">Instrucciones</a>
+        </div>
+
+    </div>
+
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="./truco-vue.js"></script>
+</body>
+</html>
