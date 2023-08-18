@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truco</title>
+    <link rel="stylesheet" href="./styles/rules.css">
+    <link rel="shortcut icon" href="./img/1sword.png" type="image/x-icon">
+</head>
+<body>
+    <div class="main__container">
+        <div class="box__container">
+            <div>
+                <h3>Objetivo del juego</h3>
+                <div class="text__container">
+                    <p>El truco argentino se juega a 2 jugadores o por parejas y se utiliza la baraja española de 40 cartas.</p>
+                    <p>El objetivo del juego es ganar un número determinado de chicos (1, 2 ó 3 chicos). Cada chico se puede jugar a 15 ó 30 puntos. La primera mitad de los puntos se les llama popularmente “malas”, y a la segunda “buenas”.</p>
+                    <p>Los puntos se consiguen mediante los trucos y los envites, que son apuestas que se van realizando en el transcurso de las diferentes manos de cada ronda.</p>
+                </div>
+            </div>
+            <div>
+                <h3>Valor de las cartas (de mayor a menor)</h3>
+                <div>
+                    <ul>
+                        <li>As de espadas (también llamado “la mayor”)</li>
+                        <li>As de bastos</li>
+                        <li>Siete de espadas (manilla de espadas)</li>
+                        <li>Siete de oros (manilla de oros)</li>
+                        <li>Treses</li>
+                        <li>Doses</li>
+                        <li>As de oros y as de copas (llamados “ases falsos”)</li>
+                        <li>Doces</li>
+                        <li>Onces</li>
+                        <li>Dieces</li>
+                        <li>Siete de copas y siete de bastos (llamados “sietes falsos” o “malos”)</li>
+                        <li>Seises</li>
+                        <li>Cincos</li>
+                        <li>Cuatros</li>
+                    </ul>
+                </div>
+            </div>
+            <div>
+                <h3>Cómo jugar al truco argentino</h3>
+                <div class="text__container">
+                    <div>
+                        <p>Al principio de la partida se decide por sorteo automático el jugador que es mano, es decir, el que empieza a jugar. En la siguiente ronda (si la hay) empezaría el jugador situado a la derecha del actual.</p>
+                        <p>En cada ronda, se reparten 3 cartas a cada jugador y todos tiran una carta por turnos. El jugador con la carta de mayor valor ganará dicha mano y tirará primero en la siguiente (en caso de empate el jugador anterior será el primero en tirar). La primera pareja o jugador que gana 2 manos, gana la ronda.</p>
+                    </div>
+                    <p class="example">Por ejemplo, si una pareja gana la primera mano y empata la segunda, gana la ronda.</p>
+                    <div class="list__cont">
+                        <h4>Casos especiales: </h4>
+                        <ul>
+                            <li>Si se empata la primera mano ganará aquel jugador o pareja que gane cualquiera de las dos manos restantes.</li>
+                            <li>Si se gana una mano, se pierde otra y se empata la 3ª, gana el jugador o pareja que ha ganado la primera mano.</li>
+                            <li>Si se empatan las 3 manos seguidas, ganará la ronda el jugador mano.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3>El truco</h3>
+                <div class="text__container">
+                    <div>
+                        <p>El truco es una apuesta que se puede realizar en cualquier momento de la partida y la cobra el ganador de la ronda.</p>
+                    </div>
+                    <div class="list__cont">
+                        <h4>La pareja o jugador contrario debe responder con una de las siguientes opciones:</h4>
+                        <ul>
+                            <li>No quiero. Rechaza el truco y la pareja contraria gana la ronda.</li>
+                            <li>Quiero. Acepta la apuesta la cual se resolverá al final de la ronda.</li>
+                            <li>Retruco, Vale cuatro. Sube la apuesta y pasa el turno a la pareja contraria para que decida.</li>
+                        </ul>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr class="file__head">
+                                <th>Apuesta</th>
+                                <th>Puntos</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table__body__truco">
+                            <tr class="file__impar">
+                                <td>Si no hay apuesta</td>
+                                <td>1 punto al ganador de la ronda</td>
+                            </tr>
+                            <tr class="file__par">
+                                <td>Truco</td>
+                                <td>2 puntos</td>
+                            </tr>
+                            <tr class="file__impar">
+                                <td>Retruco</td>
+                                <td>3 puntos</td>
+                            </tr>
+                            <tr class="file__par">
+                                <td>Vale4</td>
+                                <td>4 puntos</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <h3>El envido</h3>
+                <div class="text__container">
+                    <div>
+                        <p>Esta apuesta la gana el jugador que consigue ligar 2 cartas del mismo palo cuya suma sea la más alta. En este caso, los sietes son las cartas de mayor valor, y los ases las más bajas. Además, sólo se puede realizar en la primera mano y siempre antes del truco.</p>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>Si se tienen 2 cartas del mismo palo, se suma su valor + 20 (de ahí la importancia de ligar dos cartas del mismo palo). La puntuación más alta del envido es 33 (7+6+20=33).</li>
+                            <li>Las figuras o cartas negras (sota, caballo y rey) valen 0 puntos para el envido. Si se tienen 2 figuras del mismo palo la puntuación de envido es 20.</li>
+                            <li>Si nadie tiene 2 cartas del mismo palo, se cuenta la carta más alta.</li>
+                            <li>En caso de empate, gana el jugador que va de mano.</li>
+                        </ul>
+                    </div>
+                    <p class="example">Ejemplo: un 7 de copas pierde contra un 3 y un 1 de espadas (3+1+20=24 de envido)</p>
+                    <p>En el envido es importante saber si se está en “buenas” o “malas”. En “buenas” al menos un jugador o pareja ya tiene la mitad de puntos. En “malas” todavía nadie ha llegado a la mitad.</p>
+
+                    <div class="list__cont">
+                        <h4>La pareja o jugador contrario debe responder con una de las siguientes opciones:</h4>
+                        <ul>
+                            <li>No quiero. Rechaza la apuesta y la pareja que ha envidado suma los puntos apostados hasta ese momento.</li>
+                            <li>Quiero. Acepta la apuesta que se resolverá al final de la ronda.</li>
+                            <li>Envido, Real envido, Falta. Sube la apuesta y pasa el turno al jugador o pareja contraria para que decida. Ver tabla a continuación.</li>
+                        </ul>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr class="file__head">
+                                <th colspan="3">Puntuación conseguida en el envido</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="file__impar">
+                                <th colspan="1">Apuesta(s)</th>
+                                <th colspan="1">No quiero</th>
+                                <th colspan="1">Quiero</th>
+                            </tr>
+                            <tr class="file__par">
+                                <td colspan="1">Envido</td>
+                                <td colspan="1">1 punto</td>
+                                <td colspan="1">2 puntos</td>
+                            </tr>
+                            <tr class="file__impar">
+                                <td colspan="1">Real envido</td>
+                                <td colspan="1">1 punto</td>
+                                <td colspan="1">3 puntos</td>
+                            </tr>
+                            <tr class="file__par">
+                                <td colspan="1">Falta envido</td>
+                                <td colspan="1">1 punto</td>
+                                <td colspan="1">Ver reglas mas abajo</td>
+                            </tr>
+                            <tr class="file__impar">
+                                <td colspan="1">Envido + Envido</td>
+                                <td colspan="1">2 puntos</td>
+                                <td colspan="1">4 puntos</td>
+                            </tr>
+                            <tr class="file__par">
+                                <td colspan="1">Envido + Real envido</td>
+                                <td colspan="1">2 puntos</td>
+                                <td colspan="1">5 puntos</td>
+                            </tr>
+                            <tr class="file__impar">
+                                <td colspan="1">Envido + Falta envido</td>
+                                <td colspan="1">2 puntos</td>
+                                <td colspan="1">Ver reglas mas abajo</td>
+                            </tr>
+                            <tr class="file__par">
+                                <td colspan="1">Real envido + Falta envido</td>
+                                <td colspan="1">3 puntos</td>
+                                <td colspan="1">Ver reglas mas abajo</td>
+                            </tr>
+                            <tr class="file__impar">
+                                <td colspan="1">Envido + Envido + Real envido</td>
+                                <td colspan="1">4 puntos</td>
+                                <td colspan="1">7 puntos</td>
+                            </tr>
+                            <tr class="file__par">
+                                <td colspan="1">Envido + Real envido + Falta envido</td>
+                                <td colspan="1">5 puntos</td>
+                                <td colspan="1">Ver reglas mas abajo</td>
+                            </tr>
+                            <tr class="file__impar">
+                                <td colspan="1">Envido + Envido + Real envido + Falta envido</td>
+                                <td colspan="1">7 puntos</td>
+                                <td colspan="1">Ver reglas mas abajo</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="list__cont">
+                        <h4>La falta es la apuesta máxima del envido y la puntuación conseguida depende del estado de la partida:</h4>
+                        <ul>
+                            <li>Si se está en “malas”, el jugador o pareja ganadora del envite gana el chico.</li>
+                            <li>Si se está en “buenas”, el jugador o pareja ganadora se lleva los puntos que le faltan al jugador o pareja con más puntos para conseguir el chico.</li>
+                        </ul>
+                    </div>
+                    <p class="example">Ejemplo: en una partida a 30 puntos, una pareja tiene 10 puntos y la otra 20; en la falta se apostarían 10 puntos por estar en “buenas” (30-20=10).</p>
+                    <p>El envido se juega antes que el truco, por tanto, si una pareja llega a los puntos de un chico sumando los puntos del envido, gana el chico y el truco no se tiene en cuenta.</p>
+                    <p class="example">Ejemplo: en una partida a 30 puntos, una pareja tiene 28 puntos y la otra 26; la primera gana un envido de 2 puntos y la segunda gana un truco de 4 puntos; gana la primera pareja con el envido.</p>
+                </div>
+            </div>
+            <a href="./index.html" class="ancor__menu">Volver al menu</a>
+        </div>
+    </div>
+</body>
+</html>

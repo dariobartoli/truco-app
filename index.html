@@ -6,18 +6,29 @@
     <title>Truco</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link rel="stylesheet" href="./styles/index.css">
+    <link rel="shortcut icon" href="./img/1sword.png" type="image/x-icon">
 
 </head>
 <body>
     <div class="mainContainer" id="app">
         <div class="index__card">
-            <h1>TRUCO</h1>
+            <img src="./img/truco.png" alt="truco">
             <div>
-                <input type="text" placeholder="Ingrese su nick" v-model="namePlayer">
+                <input type="text" placeholder="Ingrese su nick" v-model="namePlayer" class="input__nick">
                 <p class="texto__warning" :class="{warning: namePlayerBool == true}">Ingresar un nombre...</p>
             </div>
-            <button @click.prevent="playGame()">Jugar</button>
-            <a href="">Instrucciones</a>
+            <button @click.prevent="playGame()" class="button__play">Siguiente</button>
+            <div class="result__container">
+                <div>
+                    <img src="./img/thropy.png" alt="thropy">
+                    <p>Victorias: {{victory}}</p>
+                </div>
+                <div>
+                    <img src="./img/skull.png" alt="skull">
+                    <p>Derrotas: {{defeat}}</p>
+                </div>
+            </div>
+            <a href="./rules.html" class="rules">Instrucciones</a>
         </div>
 
     </div>

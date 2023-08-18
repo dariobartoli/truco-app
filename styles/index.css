@@ -18,7 +18,7 @@
 .index__card{
     width: 90%;
     max-width: 600px;
-    height: 300px;
+    height: 380px;
     background-color: white;
     border-radius: 0.6rem;
     border: rgb(186, 186, 186) 1px solid;
@@ -37,3 +37,71 @@
     opacity: 1;
     transition: 0.2s;
 }
+.input__nick{
+    width: 200px;
+    height: 30px;
+    padding: 0.5rem;
+    font-size: 1.1rem;
+    border: none;
+    border: 1px rgb(89, 89, 89) solid;
+    border-radius: 0.5rem;
+}
+.input__nick:focus{
+    outline: none;
+    border: 2px rgb(76, 170, 41) solid;
+}
+.button__play{
+    padding: 1rem;
+    width: 200px;
+    font-size: 1.3rem;
+    font-weight: 500;
+    border: none;
+    background-color: #75d375;
+    border-radius: 0.8rem;
+    border: 1px rgb(125, 125, 125) solid;
+    transition: 0.5s;
+    cursor: pointer;
+}
+.button__play:hover{
+    color: #52ae52;
+    background-color: rgb(249, 249, 249);
+    border: 1px #75d375 solid;
+    transition: 0.5s;
+}
+
+.result__container{
+    display: flex;
+    flex-wrap: wrap;
+    width: 85%;
+    max-width: 330px;
+    gap: 2rem;
+    background-color: rgb(189, 189, 189);
+    padding: 0.8rem;
+    border-radius: 0.8rem;
+    border: 1px rgb(137, 137, 137) solid;
+}
+.result__container>div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+.result__container>div>img{
+    width: 30px;
+}
+.result__container>div>p{
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.rules{
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    text-decoration: underline dotted;
+}
+/* .rules:hover{
+    transition: 0.5s;
+    scale: 1.05;
+} */

@@ -6,6 +6,7 @@
     <title>Truco</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link rel="stylesheet" href="./styles/truco.css">
+    <link rel="shortcut icon" href="./img/1sword.png" type="image/x-icon">
     <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
@@ -20,19 +21,23 @@
                 <h1>PUNTAJE:</h1>
                 <div class="main__panel__puntaje">
                     <div>
-                        <h1 class="main__panel__subtitles">{{namePlayer}}</h1>
-                        <h3>Puntos Ronda = {{game.p2Points}}</h3>
-                        <h3 v-if="!game.p2PointsBad">Malas = {{game.p2PointsTotal}}</h3>
-                        <h3 v-if="game.p2PointsBad">Buenas = {{game.p2Buenas}}</h3>
-                        <h3>Envido = {{playerTwo.totalEnvido}}</h3>
+                        <h1 class="main__panel__subtitles">{{namePlayer}}:</h1>
+                        <div>
+                            <h3>Puntos Ronda = {{game.p2Points}}</h3>
+                            <h3 v-if="!game.p2PointsBad" class="malas">Malas = {{game.p2PointsTotal}}</h3>
+                            <h3 v-if="game.p2PointsBad" class="buenas">Buenas = {{game.p2Buenas}}</h3>
+                            <h3>Puntos E. = {{playerTwo.totalEnvido}}</h3>
+                        </div>
                     </div>
                     <div>
-                        <h1 class="main__panel__subtitles">Tostador</h1>
-                        <h3>Puntos Ronda = {{game.p1Points}}</h3>
-                        <h3 v-if="!game.p1PointsBad">Malas = {{game.p1PointsTotal}}</h3>
-                        <h3 v-if="game.p1PointsBad">Buenas = {{game.p1Buenas}}</h3>
-                        <h3 v-if="envidoAccept.length == 0 || envidoAccept == 'rechazado'">Envido = ?</h3>
-                        <h3 v-if="envidoAccept == 'aceptado'">Envido = {{playerOne.totalEnvido}}</h3>
+                        <h1 class="main__panel__subtitles">Tostador:</h1>
+                        <div>
+                            <h3>Puntos Ronda = {{game.p1Points}}</h3>
+                            <h3 v-if="!game.p1PointsBad" class="malas">Malas = {{game.p1PointsTotal}}</h3>
+                            <h3 v-if="game.p1PointsBad" class="buenas">Buenas = {{game.p1Buenas}}</h3>
+                            <h3 v-if="envidoAccept.length == 0 || envidoAccept == 'rechazado'">Puntos E. = ?</h3>
+                            <h3 v-if="envidoAccept == 'aceptado'">Puntos E. = {{playerOne.totalEnvido}}</h3>
+                        </div>
                     </div>
                 </div>
                 <div class="main__panel__status__container">    
@@ -41,58 +46,58 @@
                         <p v-show="game.typeEnvido == ''">Ninguno</p>
                         <p v-show="game.typeEnvido == 'envido'">Envido</p>
                         <p v-if="game.typeEnvido == 'envido' && game.statusEnvido">Aceptado +2</p>
-                        <p v-if="game.typeEnvido == 'envido' && !game.statusEnvido">No aceptado +1</p>
+                        <p v-if="game.typeEnvido == 'envido' && !game.statusEnvido">Rechazado +1</p>
 
                         <p v-show="game.typeEnvido == 'realenvido'">Real Envido</p>
                         <p v-if="game.typeEnvido == 'realenvido' && game.statusEnvido">Aceptado +3</p>
-                        <p v-if="game.typeEnvido == 'realenvido' && !game.statusEnvido">No aceptado +1</p>
+                        <p v-if="game.typeEnvido == 'realenvido' && !game.statusEnvido">Rechazado +1</p>
 
                         <p v-show="game.typeEnvido == 'faltaenvido'">Falta Envido</p>
                         <p v-if="game.typeEnvido == 'faltaenvido' && game.statusEnvido">Aceptado</p>
-                        <p v-if="game.typeEnvido == 'faltaenvido' && !game.statusEnvido">No aceptado +1</p>
+                        <p v-if="game.typeEnvido == 'faltaenvido' && !game.statusEnvido">Rechazado +1</p>
 
                         <p v-show="game.typeEnvido == 'envidoenvido'">Envido Envido</p>
                         <p v-if="game.typeEnvido == 'envidoenvido' && game.statusEnvido">Aceptado +4</p>
-                        <p v-if="game.typeEnvido == 'envidoenvido' && !game.statusEnvido">No aceptado +2</p>
+                        <p v-if="game.typeEnvido == 'envidoenvido' && !game.statusEnvido">Rechazado +2</p>
 
                         <p v-show="game.typeEnvido == 'envidorealenvido'">Envido Real Envido</p>
                         <p v-if="game.typeEnvido == 'envidorealenvido' && game.statusEnvido">Aceptado +5</p>
-                        <p v-if="game.typeEnvido == 'envidorealenvido' && !game.statusEnvido">No aceptado +2</p>
+                        <p v-if="game.typeEnvido == 'envidorealenvido' && !game.statusEnvido">Rechazado +2</p>
 
                         <p v-show="game.typeEnvido == 'envidofaltaenvido'">Envido Falta Envido</p>
                         <p v-if="game.typeEnvido == 'envidofaltaenvido' && game.statusEnvido">Aceptado</p>
-                        <p v-if="game.typeEnvido == 'envidofaltaenvido' && !game.statusEnvido">No aceptado +2</p>
+                        <p v-if="game.typeEnvido == 'envidofaltaenvido' && !game.statusEnvido">Rechazado +2</p>
 
                         <p v-show="game.typeEnvido == 'realenvidofalta'">Real Falta Envido</p>
                         <p v-if="game.typeEnvido == 'realenvidofalta' && game.statusEnvido">Aceptado</p>
-                        <p v-if="game.typeEnvido == 'realenvidofalta' && !game.statusEnvido">No aceptado +3</p>
+                        <p v-if="game.typeEnvido == 'realenvidofalta' && !game.statusEnvido">Rechazado +3</p>
 
                         <p v-show="game.typeEnvido == 'envidoenvidoreal'">Envido Envido Real Envido</p>
                         <p v-if="game.typeEnvido == 'envidoenvidoreal' && game.statusEnvido">Aceptado +7</p>
-                        <p v-if="game.typeEnvido == 'envidoenvidoreal' && !game.statusEnvido">No aceptado +4</p>
+                        <p v-if="game.typeEnvido == 'envidoenvidoreal' && !game.statusEnvido">Rechazado +4</p>
 
                         <p v-show="game.typeEnvido == 'envidorealfalta'">Falta Envido</p>
                         <p v-if="game.typeEnvido == 'envidorealfalta' && game.statusEnvido">Aceptado</p>
-                        <p v-if="game.typeEnvido == 'envidorealfalta' && !game.statusEnvido">No aceptado +5</p>
+                        <p v-if="game.typeEnvido == 'envidorealfalta' && !game.statusEnvido">Rechazado +5</p>
 
                         <p v-show="game.typeEnvido == 'envidoenvidorealfalta'">Falta Envido</p>
                         <p v-if="game.typeEnvido == 'envidoenvidorealfalta' && game.statusEnvido">Aceptado</p>
-                        <p v-if="game.typeEnvido == 'envidoenvidorealfalta' && !game.statusEnvido">No aceptado +7</p>
+                        <p v-if="game.typeEnvido == 'envidoenvidorealfalta' && !game.statusEnvido">Rechazado +7</p>
                     </div>
                     <div>
                         <h2 class="main__panel__subtitles">Estado Truco:</h2>
                         <p v-show="game.typeTruco == 'nada'">Ninguno</p>
-                        <p v-show="game.typeTruco == 'truco' || game.typeTruco == 'trucoAccept'">Truco Aceptado</p>
-                        <p v-show="game.typeTruco == 'reTruco' || game.typeTruco == 'reTrucoAccept'">Re Truco Aceptado</p>
-                        <p v-show="game.typeTruco == 'vale4' || game.typeTruco == 'vale4Accept'">Vale 4 Aceptado</p>
+                        <p v-show="game.typeTruco == 'truco' || game.typeTruco == 'trucoAccept'">Truco</p>
+                        <p v-show="game.typeTruco == 'reTruco' || game.typeTruco == 'reTrucoAccept'">Re Truco</p>
+                        <p v-show="game.typeTruco == 'vale4' || game.typeTruco == 'vale4Accept'">Vale 4</p>
                     </div>
                 </div>
                 <div class="rondas__container">
                     <h1>Rondas:</h1>
                     <div class="circles__container">
-                        <div :class="{redCircle: game.checkVictoryField[0] == 'P1', greenCircle: game.checkVictoryField[0] == 'P2', yellowCircle: game.checkVictoryField[0] == 'E'}"></div>
-                        <div :class="{redCircle: game.checkVictoryField[1] == 'P1', greenCircle: game.checkVictoryField[1] == 'P2', yellowCircle: game.checkVictoryField[1] == 'E'}"></div>
-                        <div :class="{redCircle: game.checkVictoryField[2] == 'P1', greenCircle: game.checkVictoryField[2] == 'P2', yellowCircle: game.checkVictoryField[2] == 'E'}"></div>
+                        <div class="circleRound" :class="{redCircle: game.checkVictoryField[0] == 'P1', greenCircle: game.checkVictoryField[0] == 'P2', yellowCircle: game.checkVictoryField[0] == 'E'}"></div>
+                        <div class="circleRound" :class="{redCircle: game.checkVictoryField[1] == 'P1', greenCircle: game.checkVictoryField[1] == 'P2', yellowCircle: game.checkVictoryField[1] == 'E'}"></div>
+                        <div class="circleRound" :class="{redCircle: game.checkVictoryField[2] == 'P1', greenCircle: game.checkVictoryField[2] == 'P2', yellowCircle: game.checkVictoryField[2] == 'E'}"></div>
                     </div>
                 </div>
             </div>
@@ -108,7 +113,7 @@
                         </div>
                     </div>
                 </div>
-                <button @click.prevent="clean(1)" class="button__all button__accept">Cerrar</button>
+                <button @click.prevent="clean(1000)" class="button__all button__accept">Cerrar</button>
             </div>
 
             <div>
@@ -116,9 +121,9 @@
                     <div v-for="cardP1 in playerOne.cardHand">
                         <button :disabled="game.p1Turn || field.length == 2" @click.prevent="selectCard(cardP1, playerOne)" class="card__bot animate__animated animate__fadeInRight" :class="{cardBlock: game.p1Turn == true}">
                             <div class="card__border">
-                                <!-- <p class="number1">{{cardP1.number}}</p> -->
-                                <img src="./img/back.png" alt="imagen-card" class="imageCard">
-                                <!-- <p class="number2">{{cardP1.number}}</p> -->
+                                <p class="number1">{{cardP1.number}}</p>
+                                <img :src="cardP1.img" alt="imagen-card" class="imageCard">
+                                <p class="number2">{{cardP1.number}}</p>
                             </div>
                         </button>
                     </div>
@@ -155,19 +160,12 @@
                     </div>
                 </div>
 
+                <img v-if="envidoAccept == 'aceptado'" class="response response__envido" src="./img/envidoAceptado.png" alt="envido">
+                <img v-if="envidoAccept == 'rechazado'" class="response response__envido" src="./img/envidoDeny.png" alt="envido">
 
-                <p v-if="envidoAccept == 'aceptado'" class="response">Envido Aceptado</p>
-                <p v-if="envidoAccept == 'rechazado'" class="response">Envido Rechazado</p>
+                <img v-if="trucoAccept == 'truco' || trucoAccept == 'reTruco' || trucoAccept == 'vale4'" class="response response__truco" src="./img/trucoAceptado.png" alt="truco">
+                <img v-if="trucoAccept == 'trucoDeny' || trucoAccept == 'reTrucoDeny' || trucoAccept == 'vale4Deny'" class="response response__truco" src="./img/trucoDeny.png" alt="truco">
 
-                <p v-if="trucoAccept == 'truco'" class="response">Truco Aceptado</p>
-                <p v-if="trucoAccept == 'trucoDeny'" class="response">Truco Rechazado</p>
-
-                <p v-if="trucoAccept == 'reTruco'" class="response"> ReTruco Aceptado</p>
-                <p v-if="trucoAccept == 'reTrucoDeny'" class="response"> ReTruco Rechazado</p>
-
-                <p v-if="trucoAccept == 'vale4'" class="response">Vale 4 Aceptado</p>
-                <p v-if="trucoAccept == 'vale4Deny'" class="response">Vale 4 Rechazado</p>
-    
             </div>
 
 
@@ -200,9 +198,6 @@
                     <div class="puntaje__envido">
                         <h1>{{playerTwo.totalEnvido}}</h1>
                     </div>
-                    <div class="info__movil">
-                        <span class="material-symbols-outlined" @click.prevent="showInfo()">info</span>
-                    </div>
                 </div>
             </div>
 
@@ -231,7 +226,7 @@
                     </div>
                 </div> -->
 
-            <div v-if="panelEnvidoP2" class="trucarP2 panelDelEnvido animate__animated animate__zoomIn animate__zoomIn animate__delay-1s">
+            <div v-if="panelEnvidoP2 && game.trucoDeny == false" class="trucarP2 panelDelEnvido animate__animated animate__zoomIn animate__zoomIn animate__delay-1s">
                 <div class="panel__envido__container">
                     <div>
                         <h3 v-show="game.typeEnvido == 'envido'">Envido</h3>
@@ -283,7 +278,7 @@
             </div> -->
 
 
-            <div v-if="panelTrucoP1" class="trucarP2 trucoPanel animate__animated animate__zoomIn animate__delay-1s">
+            <div v-if="panelTrucoP1 && game.trucoDeny == false" class="trucarP2 trucoPanel animate__animated animate__zoomIn animate__delay-1s">
                 <div class="panel__truco__container">
                     <div>
                         <h3 v-show="playerOne.truco == true && playerOne.vale4 == false">TRUCO!!!</h3>
@@ -318,9 +313,12 @@
                 </div>
             </div>
 
-
+            <div class="info__movil">
+                <span class="material-symbols-outlined" @click.prevent="showInfo()">info</span>
+            </div>
             
-            <button @click="mixAndShare(deck.deck)" v-if="game.gameStart == false" class="startGame button__all">Siguiente Ronda</button>
+            <button @click="mixAndShare(deck.deck)" v-if="game.gameStart == false && count == 1" class="startGame button__all">Jugar</button>
+            <button @click="mixAndShare(deck.deck)" v-if="game.gameStart == false && count > 1" class="startGame button__all">Siguiente Ronda</button>
 
 
 
