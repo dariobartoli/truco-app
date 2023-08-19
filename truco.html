@@ -121,9 +121,9 @@
                     <div v-for="cardP1 in playerOne.cardHand">
                         <button :disabled="game.p1Turn || field.length == 2" @click.prevent="selectCard(cardP1, playerOne)" class="card__bot animate__animated animate__fadeInRight" :class="{cardBlock: game.p1Turn == true}">
                             <div class="card__border">
-                                <p class="number1">{{cardP1.number}}</p>
-                                <img :src="cardP1.img" alt="imagen-card" class="imageCard">
-                                <p class="number2">{{cardP1.number}}</p>
+                                <!-- <p class="number1">{{cardP1.number}}</p> -->
+                                <img src="./img/back.png" alt="imagen-card" class="imageCard">
+                                <!-- <p class="number2">{{cardP1.number}}</p> -->
                             </div>
                         </button>
                     </div>
