@@ -163,7 +163,9 @@
                 <img v-if="envidoAccept == 'aceptado'" class="response response__envido" src="./img/envidoAceptado.png" alt="envido">
                 <img v-if="envidoAccept == 'rechazado'" class="response response__envido" src="./img/envidoDeny.png" alt="envido">
 
-                <img v-if="trucoAccept == 'truco' || trucoAccept == 'reTruco' || trucoAccept == 'vale4'" class="response response__truco" src="./img/trucoAceptado.png" alt="truco">
+                <img v-if="game.typeTruco == 'truco'" class="response response__truco" src="./img/trucoAceptado.png" alt="truco">
+                <img v-if="game.typeTruco == 'reTruco'" class="response response__truco" src="./img/trucoAceptado.png" alt="truco">
+                <img v-if="game.typeTruco == 'vale4'" class="response response__truco" src="./img/trucoAceptado.png" alt="truco">
                 <img v-if="trucoAccept == 'trucoDeny' || trucoAccept == 'reTrucoDeny' || trucoAccept == 'vale4Deny'" class="response response__truco" src="./img/trucoDeny.png" alt="truco">
 
             </div>

@@ -338,6 +338,7 @@ const app = Vue.createApp({
             reTruco: false,
             vale4: false,
             envido: false,
+            trucoPoints: 0,
         }
         this.game = {
             gameStart: false,
@@ -1026,6 +1027,11 @@ const app = Vue.createApp({
             })
             this.botPlayer.trucoPoints = valueTruco
             this.playerOne.cardHand = this.playerOne.cardHand.sort((a,b) => b.value - a.value).reverse()
+            let valueTrucoPlayer = null
+            this.playerTwo.cardHand.forEach((card) =>{
+                valueTrucoPlayer += card.value
+            })
+            this.playerTwo.trucoPoints = valueTrucoPlayer
         },
         botPlayCard(){
         },
@@ -1725,7 +1731,7 @@ const app = Vue.createApp({
                             }
                         }else if(this.game.checkVictoryField.length == 1) {
                             if(this.game.checkVictoryField[0] == "P1" && this.playerTwo.truco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 24){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "reTruco")
                                 }else if(this.botPlayer.trucoPoints >= 18){
@@ -1733,7 +1739,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("truco")
                                 }else this.denyTruco("truco", this.playerOne)
                             }else if(this.game.checkVictoryField[0] == "E" && this.playerTwo.truco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 26){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "reTruco")
                                 }else if(this.botPlayer.trucoPoints >= 20){
@@ -1741,7 +1747,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("truco")
                                 }else this.denyTruco("truco", this.playerOne)
                             }else if(this.game.checkVictoryField[0] == "P2" && this.playerTwo.truco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 27){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "reTruco")
                                 }else if(this.botPlayer.trucoPoints >= 22){
@@ -1749,7 +1755,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("truco")
                                 }else this.denyTruco("truco", this.playerOne)
                             }else if(this.game.checkVictoryField[0] == "P1" && this.playerTwo.reTruco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 26){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "vale4")
                                 }else if(this.botPlayer.trucoPoints >= 19){
@@ -1757,7 +1763,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("reTruco")
                                 }else this.denyTruco("reTruco", this.playerOne)
                             }else if(this.game.checkVictoryField[0] == "E" && this.playerTwo.reTruco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 28){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "vale4")
                                 }else if(this.botPlayer.trucoPoints >= 21){
@@ -1765,7 +1771,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("reTruco")
                                 }else this.denyTruco("reTruco", this.playerOne)
                             }else if(this.game.checkVictoryField[0] == "P2" && this.playerTwo.reTruco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 30){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "vale4")
                                 }else if(this.botPlayer.trucoPoints >= 22){
@@ -1783,14 +1789,14 @@ const app = Vue.createApp({
                                     this.aceptarTruco("vale4")
                                 }else this.denyTruco("vale4", this.playerOne)
                             }else if(this.game.checkVictoryField[0] == "P2" && this.playerTwo.vale4 == true){
-                                if(this.botPlayer.trucoPoints >= 26){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.aceptarTruco("vale4")
                                 }else this.denyTruco("vale4", this.playerOne)
                             }
                         }else if(this.game.checkVictoryField.length == 2) {
                             if(this.game.checkVictoryField[1] == "P1" && this.playerTwo.truco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 24){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "reTruco")
                                 }else if(this.botPlayer.trucoPoints >= 18){
@@ -1798,7 +1804,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("truco")
                                 }else this.denyTruco("truco", this.playerOne)
                             }else if(this.game.checkVictoryField[1] == "E" && this.playerTwo.truco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 26){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "reTruco")
                                 }else if(this.botPlayer.trucoPoints >= 20){
@@ -1806,7 +1812,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("truco")
                                 }else this.denyTruco("truco", this.playerOne)
                             }else if(this.game.checkVictoryField[1] == "P2" && this.playerTwo.truco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 27){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "reTruco")
                                 }else if(this.botPlayer.trucoPoints >= 22){
@@ -1814,7 +1820,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("truco")
                                 }else this.denyTruco("truco", this.playerOne)
                             }else if(this.game.checkVictoryField[1] == "P1" && this.playerTwo.reTruco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 26){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "vale4")
                                 }else if(this.botPlayer.trucoPoints >= 19){
@@ -1822,7 +1828,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("reTruco")
                                 }else this.denyTruco("reTruco", this.playerOne)
                             }else if(this.game.checkVictoryField[1] == "E" && this.playerTwo.reTruco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 28){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "vale4")
                                 }else if(this.botPlayer.trucoPoints >= 21){
@@ -1830,7 +1836,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("reTruco")
                                 }else this.denyTruco("reTruco", this.playerOne)
                             }else if(this.game.checkVictoryField[1] == "P2" && this.playerTwo.reTruco == true && this.playerTwo.vale4 == false){
-                                if(this.botPlayer.trucoPoints >= 30){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.cantarTruco(this.playerOne, "vale4")
                                 }else if(this.botPlayer.trucoPoints >= 22){
@@ -1838,7 +1844,7 @@ const app = Vue.createApp({
                                     this.aceptarTruco("reTruco")
                                 }else this.denyTruco("reTruco", this.playerOne)
                             }else if(this.game.checkVictoryField[1] == "P1" && this.playerTwo.vale4 == true){
-                                if(this.botPlayer.trucoPoints >= 22){
+                                if(this.botPlayer.trucoPoints > this.playerTwo.trucoPoints){
                                     this.botPlayer.trucoStatus = false
                                     this.aceptarTruco("vale4")
                                 }else this.denyTruco("vale4", this.playerOne)
