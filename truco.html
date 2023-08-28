@@ -16,6 +16,11 @@
 <body>
     <div id="app" >
         <div class="mainContainer">
+            <div class="circles__container movil" v-if="game.gameStart == true">
+                <div class="circleRound circleMovil" :class="{redCircle: game.checkVictoryField[0] == 'P1', greenCircle: game.checkVictoryField[0] == 'P2', yellowCircle: game.checkVictoryField[0] == 'E'}"></div>
+                <div class="circleRound circleMovil" :class="{redCircle: game.checkVictoryField[1] == 'P1', greenCircle: game.checkVictoryField[1] == 'P2', yellowCircle: game.checkVictoryField[1] == 'E'}"></div>
+                <div class="circleRound circleMovil" :class="{redCircle: game.checkVictoryField[2] == 'P1', greenCircle: game.checkVictoryField[2] == 'P2', yellowCircle: game.checkVictoryField[2] == 'E'}"></div>
+            </div>
 
             <div class="main__panel" :class="{show__modal: menuMovil == true}" v-show="game.gameStart == true" @click.prevent="showInfo()">
                 <h1>PUNTAJE:</h1>
@@ -201,6 +206,41 @@
                         <h1>{{playerTwo.totalEnvido}}</h1>
                     </div>
                 </div>
+                <div class="panelP2Movil" :class="{block: game.p2Turn == true}" v-show="game.gameStart">
+                    <div class="panelP2__container__buttons">
+                        <div class="panelP2__buttons">
+                            <button @click.prevent="cantarTruco(playerTwo, 'truco')" :disabled="trucoSay == true" class="button__all button__truco">Truco</button>
+                            <button @click.prevent="cantarTruco(playerTwo, 'reTruco')" :disabled="playerOne.truco == false || playerTwo.reTruco == true" class="button__truco button__all">Re Truco</button>
+                            <button @click.prevent="cantarTruco(playerTwo, 'vale4')" :disabled="playerOne.reTruco == false || playerTwo.vale4 == true" class="button__truco button__all">Vale 4</button>
+                        </div>
+                        <div class="panelP2__buttons">
+                            <button @click.prevent="sayEnvido('envido', playerTwo)" :disabled="envidoSay == true || playerTwo.cardHand.length <= 2 || trucoSay == true" class="button__envido button__all">Envido</button>
+                            <button @click.prevent="sayEnvido('realenvido', playerTwo)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true" class="button__envido button__all">Real Envido</button>
+                            <button @click.prevent="sayEnvido('faltaenvido', playerTwo)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true" class="button__envido button__all">Falta Envido</button>
+                        </div>
+                        <div class="main__panel__puntaje__movil">
+                            <div>
+                                <h1 class="main__panel__subtitles__movil">{{namePlayer}}:</h1>
+                                <div>
+                                    <h3>Puntos Ronda = {{game.p2Points}}</h3>
+                                    <h3 v-if="!game.p2PointsBad" class="malas">Malas = {{game.p2PointsTotal}}</h3>
+                                    <h3 v-if="game.p2PointsBad" class="buenas">Buenas = {{game.p2Buenas}}</h3>
+                                    <h3>Puntos E. = {{playerTwo.totalEnvido}}</h3>
+                                </div>
+                            </div>
+                            <div>
+                                <h1 class="main__panel__subtitles__movil">Tostador:</h1>
+                                <div>
+                                    <h3>Puntos Ronda = {{game.p1Points}}</h3>
+                                    <h3 v-if="!game.p1PointsBad" class="malas">Malas = {{game.p1PointsTotal}}</h3>
+                                    <h3 v-if="game.p1PointsBad" class="buenas">Buenas = {{game.p1Buenas}}</h3>
+                                    <h3 v-if="envidoAccept.length == 0 || envidoAccept == 'rechazado'">Puntos E. = ?</h3>
+                                    <h3 v-if="envidoAccept == 'aceptado'">Puntos E. = {{playerOne.totalEnvido}}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 <!--             <div v-if="panelTrucoP2" class="trucarP1">
@@ -315,7 +355,7 @@
                 </div>
             </div>
 
-            <div class="info__movil">
+            <div class="info__movil" v-if="game.gameStart == true">
                 <span class="material-symbols-outlined" @click.prevent="showInfo()">info</span>
             </div>
             
