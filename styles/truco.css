@@ -639,6 +639,14 @@
     height: 25px !important;
 }
 
+.iconSound{
+    color: rgb(60, 60, 60);
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    cursor: pointer;
+}
+
 
 @media screen and (min-width: 425px) {
     .card{
@@ -768,6 +776,11 @@
     .main__panel__subtitles__movil{
         font-size: 1rem;
     }
+    .iconSound{
+        scale: 1.5;
+        top: 8px;
+        right: 8px;
+    }
 }
 
 @media screen and (min-width: 1400px) {
@@ -861,5 +874,10 @@
     .response__truco{
         top: 0px;
         left: 130px;
+    }
+    .iconSound{
+        scale: 2;
+        top: 30px;
+        right: 110px;
     }
 }

@@ -312,6 +312,9 @@ const app = Vue.createApp({
             envidoFalse: null,
             victory: 0,
             defeat: 0,
+            sounds: {},
+            enabledMusic: false,
+            disabledMusic: true,
         }
     },
     created(){
@@ -373,6 +376,10 @@ const app = Vue.createApp({
             play: false,
             envidoWait: false
         }
+        this.sounds = {
+            truco: new Audio('./sounds/truco.opus'),
+            music: new Audio('./sounds/music.mp3'),
+        }
     },
     mounted(){
         let name = localStorage.getItem('userName');
@@ -387,6 +394,9 @@ const app = Vue.createApp({
         if(victory !=null ){
             this.victory = JSON.parse(victory)
         }
+        this.sounds.music.addEventListener('ended', this.restartMusic);
+        this.sounds.music.play()
+        this.sounds.music.volume = 0.05
     },
     methods:{
         playGame(){
@@ -399,6 +409,20 @@ const app = Vue.createApp({
         showInfo(){
             this.count += 1
             this.menuMovil == true ? this.menuMovil = false : this.menuMovil = true 
+        },
+        disabledSound(){
+            this.sounds.music.volume = 0
+            this.enabledMusic = true
+            this.disabledMusic = false
+        },
+        enabledSound(){
+            this.sounds.music.volume = 0.05
+            this.enabledMusic = false
+            this.disabledMusic = true
+        },
+        restartMusic(){
+            this.sounds.music.currentTime = 0
+            this.sounds.music.play()
         },
         cleanTotal(type){
             this.clean(1)
@@ -415,7 +439,7 @@ const app = Vue.createApp({
             if(type == "jugar"){
                 setTimeout(() => {
                     this.mixAndShare(this.deck.deck)
-                }, 300);
+                }, 350);
             }else if(type == "menu"){
                 window.location.href = "/index.html";
             }
@@ -618,6 +642,7 @@ const app = Vue.createApp({
             let playe = player.numberP
             this.trucoSay = true
             this.count += 1
+            /* this.sounds.truco.play() */
             playe == 1? [this.panelTrucoP1 = true, this.panelTrucoP2 = false] : [this.panelTrucoP1 = false, this.panelTrucoP2 = true]
             if(type == "truco"){
                 playe == 1? this.playerOne.truco = true : this.playerTwo.truco = true
@@ -1123,7 +1148,7 @@ const app = Vue.createApp({
                     }
                     setTimeout(() => {
                         this.field = []
-                    }, 2000);
+                    }, 3000);
                 }
             }else if(this.game.typeTruco == "truco" && this.field.length == 2){
                 let player = this.field[0][1].truco
@@ -1215,7 +1240,7 @@ const app = Vue.createApp({
                     setTimeout(() => {
                         this.field = []
                         this.game.typeTruco = "reTrucoAccept"
-                    }, 2000);
+                    }, 3000);
                     if(player == true){
                         if(numberPlayer == 1){
                             if(card > otherCard){
@@ -1295,7 +1320,7 @@ const app = Vue.createApp({
                 setTimeout(() => {
                     this.field = []
                     this.game.typeTruco = "vale4Accept"
-                }, 2000);
+                }, 3000);
                 if(player == true){
                     if(numberPlayer == 1){
                         if(card > otherCard){
@@ -1463,7 +1488,7 @@ const app = Vue.createApp({
             if(this.playerOne.cardHand.length >= 1 && this.field.length <= 1 && this.botPlayer.botStart == true && !this.game.p1Turn && this.botPlayer.envidoStatus == true && this.botPlayer.trucoStatus == true && this.showWinEnvido == false && this.botPlayer.envidoWait == false){
                 setTimeout(() => {
                     this.botPlayer.play = true
-                }, 2000);
+                }, 3000);
                 if(this.playerOne.cardHand.length == 3 && this.botPlayer.play){
                     if(this.botPlayer.decision <=5 && this.game.mano == "P1"){
                         this.selectCard(this.playerOne.cardHand[0], this.playerOne)
@@ -1654,7 +1679,7 @@ const app = Vue.createApp({
                     }
                 }
                 if(this.panelTrucoP2 && this.game.trucoDeny == false){
-                    if(!this.envidoSay && this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
+                    if(!this.envidoSay && this.playerOne.totalEnvido > this.playerTwo.totalEnvido && this.envidoSay == false){
                         this.sayEnvido("envido", this.playerOne, true)
                     }else if(this.botPlayer.envidoWait == false){
                         if(this.game.checkVictoryField.length == 0){
@@ -1863,6 +1888,9 @@ const app = Vue.createApp({
                     }
                 }
         }
+    },
+    beforeUnmount() {
+        this.sounds.music.removeEventListener('ended', this.restartMusic);
     }
 })
 app.mount("#app")

@@ -362,7 +362,8 @@
             <button @click="mixAndShare(deck.deck)" v-if="game.gameStart == false && count == 1" class="startGame button__all">Jugar</button>
             <button @click="mixAndShare(deck.deck)" v-if="game.gameStart == false && count > 1" class="startGame button__all">Siguiente Ronda</button>
 
-
+            <span @click="enabledSound()" class="material-symbols-outlined iconSound" v-if="enabledMusic == true">volume_off</span>
+            <span @click="disabledSound()" class="material-symbols-outlined iconSound" v-if="disabledMusic == true">volume_up</span>
 
         </div>
         {{fieldCheck}}
